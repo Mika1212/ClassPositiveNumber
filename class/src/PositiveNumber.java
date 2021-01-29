@@ -66,7 +66,7 @@ public class PositiveNumber {
         return result;
     }
 
-    public ArrayList<Integer> plus(PositiveNumber other) {
+    public PositiveNumber plus(PositiveNumber other) {
         ArrayList<Integer> result = new ArrayList<>();
         ArrayList<Integer> smth = other.number;
 
@@ -82,10 +82,12 @@ public class PositiveNumber {
         }
 
         result = transformation(result);
-        return result;
+        PositiveNumber res = new PositiveNumber(0);
+        res.number = result;
+        return res;
     }
 
-    public ArrayList<Integer> minus(int other) {
+    public PositiveNumber minus(int other) {
         ArrayList<Integer> result = new ArrayList<>();
         ArrayList<Integer> smth = arrayMaker(other);
         if (smth.size()>number.size() ||
@@ -103,10 +105,12 @@ public class PositiveNumber {
         }
 
         result = transformation(result);
-        return result;
+        PositiveNumber res = new PositiveNumber(0);
+        res.number = result;
+        return res;
     }
 
-    public ArrayList<Integer> minus(PositiveNumber other) {
+    public PositiveNumber minus(PositiveNumber other) {
         ArrayList<Integer> result = new ArrayList<>();
         ArrayList<Integer> smth = other.number;
         if (smth.size()>number.size() ||
@@ -124,24 +128,25 @@ public class PositiveNumber {
         }
 
         result = transformation(result);
-        return result;
+        PositiveNumber res = new PositiveNumber(0);
+        res.number = result;
+        return res;
     }
 
 
-    public ArrayList<Integer> division(int other) {
-        ArrayList<Integer> k = new ArrayList<>();
-        k.add(0);
+    public PositiveNumber division(int other) {
+        PositiveNumber result = new PositiveNumber(0);
         while (true) {
-            ArrayList<Integer> sample = this.minus(other);
-            if (sample != null) {
-                k.set(0, k.get(0)+1);
-                number = sample;
+            PositiveNumber sample = this.minus(other);
+            if (sample.isBigger(other) || sample.isEqual(other)) {
+                result.number.set(0, result.number.get(0)+1);
+                this.number = sample.number;
             } else {
                 break;
             }
         }
-        k = transformation(k);
-        return k;
+        result.number = transformation(result.number);
+        return result;
     }
 
     public PositiveNumber multiplication(int other) {
@@ -149,7 +154,7 @@ public class PositiveNumber {
         int i = other;
         while (i>0) {
             i--;
-            result.number = result.plus(this);
+            result = result.plus(this);
             System.out.println(result);
         }
         result.number = transformation(result.number);
@@ -205,15 +210,9 @@ public class PositiveNumber {
 
 class Main{
     public static void main(String[] args) {
-        PositiveNumber test = new PositiveNumber(200);
+        PositiveNumber test = new PositiveNumber("200000000000000000000000000000000000000000");
 
-        PositiveNumber test2 = new PositiveNumber(201);
-
-        test.number = test2.plus(test);
-        test.show();
-
-        PositiveNumber test3 = new PositiveNumber(100);
-
-        test3.multiplication(10).show();
+        PositiveNumber a = test.division(2);
+        a.show();
     }
 }
