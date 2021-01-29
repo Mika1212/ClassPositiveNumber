@@ -211,9 +211,9 @@ public class PositiveNumber {
 
 class Main{
     public static void main(String[] args) {
-        PositiveNumber test = new PositiveNumber("200000000");
+        PositiveNumber test = new PositiveNumber("20000000000");
 
-        PositiveNumber a = test.division(200);
+        PositiveNumber a = test.division(2);
         a.show();
     }
 }
