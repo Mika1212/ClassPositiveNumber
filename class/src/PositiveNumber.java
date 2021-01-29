@@ -47,7 +47,7 @@ public class PositiveNumber {
         System.out.println(number);
     }
 
-    public ArrayList<Integer> plus(int other) {
+    public PositiveNumber plus(int other) {
         ArrayList<Integer> result = new ArrayList<>();
         ArrayList<Integer> smth = arrayMaker(other);
 
@@ -62,7 +62,9 @@ public class PositiveNumber {
                 result.add(number.get(i));
         }
 
-        return result;
+        PositiveNumber res = new PositiveNumber(0);
+        res.number = result;
+        return res;
     }
 
     public PositiveNumber plus(PositiveNumber other) {
