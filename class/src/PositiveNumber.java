@@ -62,7 +62,6 @@ public class PositiveNumber {
                 result.add(number.get(i));
         }
 
-        result = transformation(result);
         return result;
     }
 
@@ -81,7 +80,6 @@ public class PositiveNumber {
                 result.add(number.get(i));
         }
 
-        result = transformation(result);
         PositiveNumber res = new PositiveNumber(0);
         res.number = result;
         return res;
@@ -104,7 +102,6 @@ public class PositiveNumber {
             result.add(number.get(i));
         }
 
-        result = transformation(result);
         PositiveNumber res = new PositiveNumber(0);
         res.number = result;
         return res;
@@ -127,7 +124,6 @@ public class PositiveNumber {
             result.add(number.get(i));
         }
 
-        result = transformation(result);
         PositiveNumber res = new PositiveNumber(0);
         res.number = result;
         return res;
@@ -136,9 +132,12 @@ public class PositiveNumber {
 
     public PositiveNumber division(int other) {
         PositiveNumber result = new PositiveNumber(0);
+        PositiveNumber sample = this.minus(0);
         while (true) {
-            PositiveNumber sample = this.minus(other);
+            sample.number = transformation(sample.number);
+            System.out.println(sample.number);
             if (sample.isBigger(other) || sample.isEqual(other)) {
+                sample = this.minus(other);
                 result.number.set(0, result.number.get(0)+1);
                 this.number = sample.number;
             } else {
@@ -210,9 +209,9 @@ public class PositiveNumber {
 
 class Main{
     public static void main(String[] args) {
-        PositiveNumber test = new PositiveNumber("200000000000000000000000000000000000000000");
+        PositiveNumber test = new PositiveNumber("200000000");
 
-        PositiveNumber a = test.division(2);
+        PositiveNumber a = test.division(200);
         a.show();
     }
 }
