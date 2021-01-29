@@ -1,3 +1,4 @@
+import java.io.PipedOutputStream;
 import java.util.ArrayList;
 
 public class PositiveNumber {
@@ -27,10 +28,10 @@ public class PositiveNumber {
     private ArrayList<Integer> arrayMaker(int anyInt) {
         int k = 0;
         int other1 = anyInt;
-        while (other1 > 0) {
+        do  {
             other1 /= 10;
             k++;
-        }
+        } while (other1 > 0);
 
         ArrayList<Integer> otherNumber = new ArrayList<>();
 
@@ -47,37 +48,85 @@ public class PositiveNumber {
     }
 
     public ArrayList<Integer> plus(int other) {
+        ArrayList<Integer> result = new ArrayList<>();
         ArrayList<Integer> smth = arrayMaker(other);
+
         for (int i=0; i<Math.min(number.size(),smth.size()); i++) {
-            number.set(i, smth.get(i) + number.get(i));
+            result.add(smth.get(i) + number.get(i));
         }
-        if (number.size()<smth.size()) {
-            for (int i = number.size(); i<smth.size();i++){
-                number.add(smth.get(i));
-            }
+
+        for (int i = Math.min(number.size(),smth.size()); i<Math.max(number.size(), smth.size());i++){
+            if (Math.max(number.size(), smth.size()) == smth.size())
+                result.add(smth.get(i));
+            else
+                result.add(number.get(i));
         }
-        number = transformation(number);
-        return number;
+
+        result = transformation(result);
+        return result;
     }
 
-    ArrayList<Integer> minus(int other) {
+    public ArrayList<Integer> plus(PositiveNumber other) {
+        ArrayList<Integer> result = new ArrayList<>();
+        ArrayList<Integer> smth = other.number;
+
+        for (int i=0; i<Math.min(number.size(),smth.size()); i++) {
+            result.add(smth.get(i) + number.get(i));
+        }
+
+        for (int i = Math.min(number.size(),smth.size()); i<Math.max(number.size(), smth.size());i++){
+            if (Math.max(number.size(), smth.size()) == smth.size())
+                result.add(smth.get(i));
+            else
+                result.add(number.get(i));
+        }
+
+        result = transformation(result);
+        return result;
+    }
+
+    public ArrayList<Integer> minus(int other) {
+        ArrayList<Integer> result = new ArrayList<>();
         ArrayList<Integer> smth = arrayMaker(other);
         if (smth.size()>number.size() ||
                 (smth.size() == number.size() && smth.get(smth.size()-1) > number.get(smth.size()-1))) {
             System.out.println('1');
             return null;
         }
-        for (int i=0; i<Math.min(number.size(),smth.size()); i++) {
-            number.set(i, number.get(i) - smth.get(i));
+
+        for (int i = 0; i< smth.size(); i++) {
+            result.add(number.get(i) - smth.get(i));
         }
-        if (number.size()<smth.size()) {
-            for (int i = number.size(); i<smth.size();i++){
-                number.add(smth.get(i)*-1);
-            }
+
+        for (int i = smth.size(); i<number.size();i++){
+            result.add(number.get(i));
         }
-        number = transformation(number);
-        return number;
+
+        result = transformation(result);
+        return result;
     }
+
+    public ArrayList<Integer> minus(PositiveNumber other) {
+        ArrayList<Integer> result = new ArrayList<>();
+        ArrayList<Integer> smth = other.number;
+        if (smth.size()>number.size() ||
+                (smth.size() == number.size() && smth.get(smth.size()-1) > number.get(smth.size()-1))) {
+            System.out.println('1');
+            return null;
+        }
+
+        for (int i = 0; i< smth.size(); i++) {
+            result.add(number.get(i) - smth.get(i));
+        }
+
+        for (int i = smth.size(); i<number.size();i++){
+            result.add(number.get(i));
+        }
+
+        result = transformation(result);
+        return result;
+    }
+
 
     public ArrayList<Integer> division(int other) {
         ArrayList<Integer> k = new ArrayList<>();
@@ -95,6 +144,38 @@ public class PositiveNumber {
         return k;
     }
 
+    public PositiveNumber multiplication(int other) {
+        PositiveNumber result = new PositiveNumber(0);
+        int i = other;
+        while (i>0) {
+            i--;
+            result.number = result.plus(this);
+            System.out.println(result);
+        }
+        result.number = transformation(result.number);
+        return result;
+    }
+
+    public Boolean isBigger(PositiveNumber other){
+        return (this.minus(other) != null &&
+                !this.minus(other).toString().equals(arrayMaker(0).toString()));
+    }
+
+    public Boolean isBigger(int other){
+        return (this.minus(other) != null &&
+                !this.minus(other).toString().equals(arrayMaker(0).toString()));
+    }
+
+    public Boolean isEqual(PositiveNumber other) {
+        if (this.minus(other) == null) return false;
+        return this.minus(other).toString().equals(arrayMaker(0).toString());
+    }
+
+    public Boolean isEqual(int other) {
+        if (this.minus(other) == null) return false;
+        return this.minus(other).toString().equals(arrayMaker(0).toString());
+    }
+
 
     public static ArrayList<Integer> transformation(ArrayList<Integer> array) {
         for (int i = 0; i<array.size(); i++){
@@ -108,9 +189,13 @@ public class PositiveNumber {
             while (array.get(i)<0) {
                 array.set(i, array.get(i)+10);
                 if (array.size()<i+2) {
+                    System.out.println('2');
                     return null;
                 }
                 array.set(i+1, array.get(i+1)-1);
+            }
+            while (array.size()>1 && array.get(array.size()-1) == 0) {
+                array.remove(array.size()-1);
             }
         }
         return array;
@@ -120,14 +205,15 @@ public class PositiveNumber {
 
 class Main{
     public static void main(String[] args) {
-        PositiveNumber test = new PositiveNumber(19);
-        test.plus(101);
+        PositiveNumber test = new PositiveNumber(200);
 
-        PositiveNumber test1 = new PositiveNumber("-100");
-        test1.show();
-        ArrayList<Integer> k = test1.division(2);
-        test1.show();
-        System.out.println(test1.number);
+        PositiveNumber test2 = new PositiveNumber(201);
 
+        test.number = test2.plus(test);
+        test.show();
+
+        PositiveNumber test3 = new PositiveNumber(100);
+
+        test3.multiplication(10).show();
     }
 }
