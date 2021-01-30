@@ -1,9 +1,13 @@
-import java.io.PipedOutputStream;
+
 import java.util.ArrayList;
 
 public class PositiveNumber {
 
     ArrayList<Integer> number;
+
+    public  PositiveNumber(){
+        this.number = new ArrayList<>();
+    }
 
     public PositiveNumber(int newNumber) {
         this.number = arrayMaker(newNumber);
@@ -43,10 +47,6 @@ public class PositiveNumber {
         return otherNumber;
     }
 
-    public void show() {
-        System.out.println(number);
-    }
-
     public PositiveNumber plus(int other) {
         ArrayList<Integer> result = new ArrayList<>();
         ArrayList<Integer> smth = arrayMaker(other);
@@ -62,7 +62,8 @@ public class PositiveNumber {
                 result.add(number.get(i));
         }
 
-        PositiveNumber res = new PositiveNumber(0);
+        result = transformation(result);
+        PositiveNumber res = new PositiveNumber();
         res.number = result;
         return res;
     }
@@ -82,7 +83,8 @@ public class PositiveNumber {
                 result.add(number.get(i));
         }
 
-        PositiveNumber res = new PositiveNumber(0);
+        result = transformation(result);
+        PositiveNumber res = new PositiveNumber();
         res.number = result;
         return res;
     }
@@ -104,7 +106,8 @@ public class PositiveNumber {
             result.add(number.get(i));
         }
 
-        PositiveNumber res = new PositiveNumber(0);
+        result = transformation(result);
+        PositiveNumber res = new PositiveNumber();
         res.number = result;
         return res;
     }
@@ -126,38 +129,43 @@ public class PositiveNumber {
             result.add(number.get(i));
         }
 
-        PositiveNumber res = new PositiveNumber(0);
+        result = transformation(result);
+        PositiveNumber res = new PositiveNumber();
         res.number = result;
         return res;
     }
 
 
     public PositiveNumber division(int other) {
-        PositiveNumber result = new PositiveNumber(0);
-        PositiveNumber sample = this.minus(0);
-        while (true) {
-            sample.number = transformation(sample.number);
-            System.out.println(sample.number);
-            if (sample.isBigger(other) || sample.isEqual(other)) {
-                sample = this.minus(other);
-                result.number.set(0, result.number.get(0)+1);
-                this.number = sample.number;
+        PositiveNumber result = new PositiveNumber();
+        result.number.add(0);
+        for (int i = 0; i<number.size(); i++){
+            result.number.add(number.get(i));
+        }
+
+        for (int i = number.size(); i>0; i--) {
+            if (result.number.get(i) >= other) {
+                result.number.set(i-1, result.number.get(i-1) + result.number.get(i) % other * 10);
+                result.number.set(i, result.number.get(i) / other);
             } else {
-                break;
+                result.number.set(i-1, result.number.get(i-1) + result.number.get(i) * 10);
+                result.number.set(i, 0);
             }
         }
+
+        result.number.set(2, result.number.get(2) / other);
+        result.number.remove(0);
+
         result.number = transformation(result.number);
         return result;
     }
 
     public PositiveNumber multiplication(int other) {
-        PositiveNumber result = new PositiveNumber(0);
-        int i = other;
-        while (i>0) {
-            i--;
-            result = result.plus(this);
-            System.out.println(result);
-        }
+        PositiveNumber result = new PositiveNumber();
+        for (int i = 0; i<number.size(); i++) {
+           result.number.add(this.number.get(i)* other);
+       }
+
         result.number = transformation(result.number);
         return result;
     }
@@ -185,33 +193,43 @@ public class PositiveNumber {
 
     public static ArrayList<Integer> transformation(ArrayList<Integer> array) {
         for (int i = 0; i<array.size(); i++){
-            while (array.get(i)>=10) {
-                array.set(i, array.get(i)-10);
+            if (array.get(i)>=10) {
                 if (array.size()<i+2) {
-                    array.add(1);
+                    array.add(array.get(i) / 10);
                 } else
-                    array.set(i+1, array.get(i+1)+1);
+                    array.set(i+1, array.get(i+1) + (array.get(i) / 10));
+                array.set(i, array.get(i) % 10);
             }
-            while (array.get(i)<0) {
-                array.set(i, array.get(i)+10);
+            if  (array.get(i)<0) {
                 if (array.size()<i+2) {
                     System.out.println('2');
                     return null;
                 }
-                array.set(i+1, array.get(i+1)-1);
+                array.set(i+1, (array.get(i+1) / 10)*-1);
+                array.set(i, (array.get(i) % 10)*-1);
             }
-            while (array.size()>1 && array.get(array.size()-1) == 0) {
-                array.remove(array.size()-1);
-            }
+        }
+        while (array.size()>1 && array.get(array.size()-1) == 0) {
+            array.remove(array.size() - 1);
         }
         return array;
     }
+
+    public void show() {
+        StringBuilder result = new StringBuilder();
+        for (int i = number.size()-1; i>=0; i--) {
+            result.append(number.get(i));
+        }
+        System.out.println(result);
+    }
+
 
 }
 
 class Main{
     public static void main(String[] args) {
-        PositiveNumber test = new PositiveNumber("20000000000");
+
+        PositiveNumber test = new PositiveNumber("1000");
 
         PositiveNumber a = test.division(2);
         a.show();
