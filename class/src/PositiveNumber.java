@@ -248,22 +248,25 @@ public class PositiveNumber implements Comparable {
         return result;
     }
 
-    /*
     public PositiveNumber division(PositiveNumber other) {
         PositiveNumber result = new PositiveNumber();
-        result.number.add(0);
         for (int i = 0; i<number.size(); i++){
             result.number.add(number.get(i));
         }
         ArrayList<Integer> some = factoring(other);
-        for ()
-
+        for (Integer integer : some) {
+            result = result.division(integer);
+        }
 
         result.number = transformation(result.number);
         return result;
     }
 
-     */
+    public PositiveNumber division(BigInteger other) {
+        PositiveNumber some = new PositiveNumber();
+        some.number = arrayMaker(other);
+        return this.division(some);
+    }
 
     public ArrayList<Integer> factoring(PositiveNumber some) {
         ArrayList<Integer> result = new ArrayList<>();
@@ -274,6 +277,7 @@ public class PositiveNumber implements Comparable {
                 result.add(divider);
             }
             divider++;
+            System.out.println(divider);
         }
         return result;
     }
@@ -361,17 +365,15 @@ public class PositiveNumber implements Comparable {
 class Main{
     public static void main(String[] args) {
 
-        PositiveNumber test = new PositiveNumber("5692311");
+        PositiveNumber test = new PositiveNumber("1234567891");
 
-        PositiveNumber test1 = new PositiveNumber(1000000);
+        PositiveNumber test1 = new PositiveNumber("54654165498265456546523154486548797886798451654");
 
-        System.out.println(125 / 3 / 3 / 2);
-        System.out.println(125%3);
+        BigInteger a = new BigInteger("1234567899");
 
-        System.out.println(test1.division(666).number);
+        System.out.println("---" + test1.division(1234567899).number);
+        System.out.println("---" + test1.division(test).number);
+        System.out.println("---" + test1.division(a).number);
 
-        System.out.println(test1.remainderOfDivision(666).number);
-
-        System.out.println(test1.factoring(test));
     }
 }
