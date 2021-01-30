@@ -1,7 +1,9 @@
 
+import javax.naming.event.ObjectChangeListener;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
-public class PositiveNumber {
+public class PositiveNumber implements Comparable {
 
     ArrayList<Integer> number;
 
@@ -47,7 +49,48 @@ public class PositiveNumber {
         return otherNumber;
     }
 
+    private ArrayList<Integer> arrayMaker(BigInteger anyInt) {
+        int k = 0;
+        BigInteger other1 = anyInt;
+        BigInteger zero = new BigInteger("0");
+        BigInteger divider = new BigInteger("10");
+        do  {
+            other1 = other1.divide(divider);
+            k++;
+        } while (other1.compareTo(zero) != 0);
+
+        ArrayList<Integer> otherNumber = new ArrayList<>();
+
+        other1 = anyInt;
+        for (int i = 0; i < k; i++) {
+            otherNumber.add(other1.mod(divider).intValue());
+            other1= other1.divide(divider);
+        }
+        return otherNumber;
+    }
+
     public PositiveNumber plus(int other) {
+        ArrayList<Integer> result = new ArrayList<>();
+        ArrayList<Integer> smth = arrayMaker(other);
+
+        for (int i=0; i<Math.min(number.size(),smth.size()); i++) {
+            result.add(smth.get(i) + number.get(i));
+        }
+
+        for (int i = Math.min(number.size(),smth.size()); i<Math.max(number.size(), smth.size());i++){
+            if (Math.max(number.size(), smth.size()) == smth.size())
+                result.add(smth.get(i));
+            else
+                result.add(number.get(i));
+        }
+
+        result = transformation(result);
+        PositiveNumber res = new PositiveNumber();
+        res.number = result;
+        return res;
+    }
+
+    public PositiveNumber plus(BigInteger other) {
         ArrayList<Integer> result = new ArrayList<>();
         ArrayList<Integer> smth = arrayMaker(other);
 
@@ -112,9 +155,9 @@ public class PositiveNumber {
         return res;
     }
 
-    public PositiveNumber minus(PositiveNumber other) {
+    public PositiveNumber minus(BigInteger other) {
         ArrayList<Integer> result = new ArrayList<>();
-        ArrayList<Integer> smth = other.number;
+        ArrayList<Integer> smth = arrayMaker(other);
         if (smth.size()>number.size() ||
                 (smth.size() == number.size() && smth.get(smth.size()-1) > number.get(smth.size()-1))) {
             System.out.println('1');
@@ -135,6 +178,28 @@ public class PositiveNumber {
         return res;
     }
 
+    public PositiveNumber minus(PositiveNumber other) {
+        ArrayList<Integer> result = new ArrayList<>();
+        ArrayList<Integer> smth = other.number;
+        if (smth.size()>number.size() ||
+                (smth.size() == number.size() && smth.get(smth.size()-1) > number.get(smth.size()-1))) {
+            System.out.println("first");
+            return null;
+        }
+
+        for (int i = 0; i< smth.size(); i++) {
+            result.add(number.get(i) - smth.get(i));
+        }
+
+        for (int i = smth.size(); i<number.size();i++){
+            result.add(number.get(i));
+        }
+
+        result = transformation(result);
+        PositiveNumber res = new PositiveNumber();
+        res.number = result;
+        return res;
+    }
 
     public PositiveNumber division(int other) {
         PositiveNumber result = new PositiveNumber();
@@ -160,6 +225,14 @@ public class PositiveNumber {
         return result;
     }
 
+    public PositiveNumber division(PositiveNumber other) {
+        PositiveNumber result = new PositiveNumber();
+
+
+        result.number = transformation(result.number);
+        return result;
+    }
+
     public PositiveNumber multiplication(int other) {
         PositiveNumber result = new PositiveNumber();
         for (int i = 0; i<number.size(); i++) {
@@ -170,24 +243,14 @@ public class PositiveNumber {
         return result;
     }
 
-    public Boolean isBigger(PositiveNumber other){
-        return (this.minus(other) != null &&
-                !this.minus(other).toString().equals(arrayMaker(0).toString()));
-    }
-
-    public Boolean isBigger(int other){
-        return (this.minus(other) != null &&
-                !this.minus(other).toString().equals(arrayMaker(0).toString()));
-    }
-
-    public Boolean isEqual(PositiveNumber other) {
-        if (this.minus(other) == null) return false;
-        return this.minus(other).toString().equals(arrayMaker(0).toString());
-    }
-
-    public Boolean isEqual(int other) {
-        if (this.minus(other) == null) return false;
-        return this.minus(other).toString().equals(arrayMaker(0).toString());
+    @Override
+    public int compareTo(Object o) {
+        PositiveNumber other = (PositiveNumber) o;
+        if (this.minus(other) == null) return -1;
+        else if
+            (this.minus(other).number.toString().equals(new PositiveNumber(0).number.toString()))
+                return 0;
+        else return 1;
     }
 
 
@@ -202,7 +265,7 @@ public class PositiveNumber {
             }
             if  (array.get(i)<0) {
                 if (array.size()<i+2) {
-                    System.out.println('2');
+                    System.out.println("second");
                     return null;
                 }
                 array.set(i+1, (array.get(i+1) / 10)*-1);
@@ -223,7 +286,6 @@ public class PositiveNumber {
         System.out.println(result);
     }
 
-
 }
 
 class Main{
@@ -231,7 +293,9 @@ class Main{
 
         PositiveNumber test = new PositiveNumber("1000");
 
-        PositiveNumber a = test.division(2);
-        a.show();
+
+        PositiveNumber test1 = new PositiveNumber(1000);
+
+        System.out.println(test1.compareTo(test));
     }
 }
