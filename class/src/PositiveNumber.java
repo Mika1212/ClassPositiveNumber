@@ -268,21 +268,20 @@ public class PositiveNumber implements Comparable {
         return this.division(some);
     }
 
-    public ArrayList<Integer> factoring(PositiveNumber some) {
+    public static ArrayList<Integer> factoring(PositiveNumber some) {
         ArrayList<Integer> result = new ArrayList<>();
         int divider = 2;
-        while (some.compareTo(1)>0) {
+        int stop = 1000000;
+        while (some.compareTo(1)>0 && divider<stop) {
             while (some.remainderOfDivision(divider).number.equals(new PositiveNumber(0).number)) {
                 some = some.division(divider);
                 result.add(divider);
             }
             divider++;
-            System.out.println(divider);
         }
+        if (some.compareTo(1)>0) result.add(some.toInt());
         return result;
     }
-
-
 
     public PositiveNumber multiplication(int other) {
         PositiveNumber result = new PositiveNumber();
@@ -293,6 +292,18 @@ public class PositiveNumber implements Comparable {
         result.number = transformation(result.number);
         return result;
     }
+
+    public int toInt() {
+        if (this.number.size() > 9) return 0;
+        int result = 0;
+        for (int i = this.number.size()-1; i > 0; i--) {
+            result+=this.number.get(i);
+            result*=10;
+        }
+        result+=this.number.get(0);
+        return result;
+    }
+
     /*
     public PositiveNumber multiplication(PositiveNumber other) {
         PositiveNumber result = new PositiveNumber();
@@ -307,6 +318,16 @@ public class PositiveNumber implements Comparable {
 
      */
 
+    /*
+    public PositiveNumber sqrt(PositiveNumber other) {
+        other.number = other.number;
+        PositiveNumber current = new PositiveNumber();
+        current.number.add(other.number.get(0));
+        if (other.number.get(0)<4) current.number.add(other.number.get(1));
+
+    }
+     */
+
     @Override
     public int compareTo(Object o) {
 
@@ -317,6 +338,7 @@ public class PositiveNumber implements Comparable {
                 return 0;
         else return 1;
     }
+
     public int compareTo(int o) {
 
         PositiveNumber other = new PositiveNumber(o);
@@ -365,15 +387,11 @@ public class PositiveNumber implements Comparable {
 class Main{
     public static void main(String[] args) {
 
-        PositiveNumber test = new PositiveNumber("1234567891");
+        PositiveNumber test = new PositiveNumber("1234567899");
 
         PositiveNumber test1 = new PositiveNumber("54654165498265456546523154486548797886798451654");
 
-        BigInteger a = new BigInteger("1234567899");
-
-        System.out.println("---" + test1.division(1234567899).number);
-        System.out.println("---" + test1.division(test).number);
-        System.out.println("---" + test1.division(a).number);
+        System.out.println(test1.division(test).number);
 
     }
 }
