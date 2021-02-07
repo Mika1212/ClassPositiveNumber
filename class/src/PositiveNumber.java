@@ -170,39 +170,51 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         return result;
     }
 
+    public PositiveNumber multiplication(PositiveNumber other) {
+        PositiveNumber result = new PositiveNumber();
+
+        for (int i = other.number.size()-1; i >= 0 ; i--) {
+            PositiveNumber helper = this.multiplication(other.number.get(i));
+            result = result.plus(helper).multiplication(10);
+        }
+        return result.division(10);
+
+    }
+
     public int toInt() {
-        if (this.number.size() > 9) return 0;
+        if (this.number.size() > 10) return 0;
         int result = 0;
         for (int i = this.number.size()-1; i > 0; i--) {
-            result+=this.number.get(i);
-            result*=10;
+            if (result+this.number.get(i) < Integer.MAX_VALUE) result+=this.number.get(i);
+            else return 0;
+            if (Integer.MAX_VALUE/result > 10) result*=10;
+            else return 0;
         }
+
         result+=this.number.get(0);
         return result;
     }
 
-    /*
-    public PositiveNumber multiplication(PositiveNumber other) {
-        PositiveNumber result = new PositiveNumber();
-        for (int i = 0; i<number.size(); i++) {
-            for (int )
-            result.number.add(this.number.get(i) * other);
+    public BigInteger toBigInteger() {
+        BigInteger result = new BigInteger("0");
+
+        for (int i = this.number.size()-1; i>=0; i--) {
+            result = result.add(BigInteger.valueOf(this.number.get(i)));
+            result = result.multiply(BigInteger.TEN);
         }
 
-        result.number = transformation(result.number);
-        return result;
+        return result.divide(BigInteger.TEN);
     }
-     */
 
-    /*
-    public PositiveNumber sqrt(PositiveNumber other) {
-        other.number = other.number;
-        PositiveNumber current = new PositiveNumber();
-        current.number.add(other.number.get(0));
-        if (other.number.get(0)<4) current.number.add(other.number.get(1));
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        for (int i = number.size()-1; i>=0; i--) {
+            result.append(number.get(i));
+        }
 
+        return result.toString();
     }
-     */
 
     @Override
     public int compareTo(PositiveNumber o) {
@@ -213,7 +225,6 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
                 return 0;
         else return 1;
     }
-
 
     public int compareTo(int o) {
 
@@ -256,17 +267,7 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         return array;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (int i = number.size()-1; i>=0; i--) {
-            result.append(number.get(i));
-        }
-
-        return result.toString();
-    }
-
-    public ArrayList<Integer> reverse() {
+    public ArrayList<Integer> reversed() {
         ArrayList<Integer> result = new ArrayList<>();
         for (int i = number.size()-1; i>=0; i--) {
             result.add(number.get(i));
@@ -373,7 +374,6 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
             o++;
         }
 
-
         return result;
     }
 
@@ -385,10 +385,10 @@ class Main{
         PositiveNumber test = new PositiveNumber( "1234567899");
         PositiveNumber test1 = new PositiveNumber("54654165498265456546523154486548797886798451654");
 
-        PositiveNumber a = new PositiveNumber("100000000");
-        PositiveNumber b = new PositiveNumber(600);
+        PositiveNumber a = new PositiveNumber(600);
+        PositiveNumber b = new PositiveNumber(601);
 
-        System.out.println(a.division(b));
-
+        System.out.println(test1.multiplication(test));
+        System.out.println(test.toInt());
     }
 }
