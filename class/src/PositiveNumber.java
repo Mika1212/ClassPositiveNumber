@@ -343,6 +343,9 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         return result;
     }
 
+
+    //Как правильно переопределить этот метод?
+    @Override
     public PositiveNumber clone(){
         PositiveNumber result = new PositiveNumber();
         result.number.addAll(this.number);
