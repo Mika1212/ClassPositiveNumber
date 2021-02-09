@@ -1,6 +1,4 @@
 # Default ignored files
-ClassPositiveNumber.gitignore
 /shelf/
 /workspace.xml
-/out
-/.idea
+.idea/
