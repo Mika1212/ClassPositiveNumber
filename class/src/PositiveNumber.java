@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class PositiveNumber implements Comparable<PositiveNumber> {
 
-    ArrayList<Integer> number;
+    private ArrayList<Integer> number;
 
     public static final PositiveNumber ZERO = new PositiveNumber(0);
     public static final PositiveNumber ONE = new PositiveNumber(1);
@@ -24,28 +24,26 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         this.number = transformation(number);
     }
 
+    public PositiveNumber(BigInteger newNumber) {
+        this.number = arrayMaker(newNumber);
+        this.number = transformation(number);
+    }
+
     private ArrayList<Integer> arrayMaker(String anyString) {
         int k = anyString.length();
         ArrayList<Integer> otherNumber = new ArrayList<>();
-        for (int i = 0; i<k; i++) {
+        for (int i = 0; i < k; i++) {
             char character = anyString.toCharArray()[k-i-1];
             otherNumber.add(Character.getNumericValue(character));
         }
         return otherNumber;
     }
 
-    private ArrayList<Integer> arrayMaker(int anyInt) {
-        int k = 0;
+    private ArrayList<Integer> arrayMaker(Integer anyInt) {
         int other1 = anyInt;
-        do  {
-            other1 /= 10;
-            k++;
-        } while (other1 > 0);
-
         ArrayList<Integer> otherNumber = new ArrayList<>();
 
-        other1 = anyInt;
-        for (int i = 0; i < k; i++) {
+        for (int i = 0; i < anyInt.toString().length(); i++) {
             otherNumber.add(other1 % 10);
             other1/=10;
         }
@@ -53,21 +51,12 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
     }
 
     private ArrayList<Integer> arrayMaker(BigInteger anyInt) {
-        int k = 0;
         BigInteger other1 = anyInt;
-        BigInteger zero = new BigInteger("0");
-        BigInteger divider = new BigInteger("10");
-        do  {
-            other1 = other1.divide(divider);
-            k++;
-        } while (other1.compareTo(zero) != 0);
-
         ArrayList<Integer> otherNumber = new ArrayList<>();
 
-        other1 = anyInt;
-        for (int i = 0; i < k; i++) {
-            otherNumber.add(other1.mod(divider).intValue());
-            other1= other1.divide(divider);
+        for (int i = 0; i < anyInt.toString().length(); i++) {
+            otherNumber.add(other1.mod(BigInteger.TEN).intValue());
+            other1= other1.divide(BigInteger.TEN);
         }
         return otherNumber;
     }
@@ -77,7 +66,7 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         ArrayList<Integer> result = new ArrayList<>();
         ArrayList<Integer> smth = other.number;
 
-        for (int i=0; i<Math.min(number.size(),smth.size()); i++) {
+        for (int i=0; i < Math.min(number.size(), smth.size()); i++) {
             result.add(smth.get(i) + number.get(i));
         }
 
@@ -100,11 +89,11 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         if (smth.size()>number.size())
             return new PositiveNumber();
 
-        for (int i = 0; i< smth.size(); i++) {
+        for (int i = 0; i < smth.size(); i++) {
             result.add(number.get(i) - smth.get(i));
         }
 
-        for (int i = smth.size(); i<number.size();i++){
+        for (int i = smth.size(); i < number.size(); i++){
             result.add(number.get(i));
         }
 
@@ -120,12 +109,12 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         result.number.add(0);
         result.number.addAll(number);
 
-        for (int i = number.size(); i>0; i--) {
+        for (int i = number.size(); i > 0; i--) {
             if (result.number.get(i) >= other) {
-                result.number.set(i-1, result.number.get(i-1) + result.number.get(i) % other * 10);
+                result.number.set(i - 1, result.number.get(i - 1) + result.number.get(i) % other * 10);
                 result.number.set(i, result.number.get(i) / other);
             } else {
-                result.number.set(i-1, result.number.get(i-1) + result.number.get(i) * 10);
+                result.number.set(i - 1, result.number.get(i - 1) + result.number.get(i) * 10);
                 result.number.set(i, 0);
             }
         }
@@ -142,12 +131,12 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         result.number.add(0);
         result.number.addAll(number);
 
-        for (int i = number.size(); i>0; i--) {
+        for (int i = number.size(); i > 0; i--) {
             if (result.number.get(i) >= other) {
-                result.number.set(i-1, result.number.get(i-1) + result.number.get(i) % other * 10);
+                result.number.set(i - 1, result.number.get(i - 1) + result.number.get(i) % other * 10);
                 result.number.set(i, result.number.get(i) / other);
             } else {
-                result.number.set(i-1, result.number.get(i-1) + result.number.get(i) * 10);
+                result.number.set(i - 1, result.number.get(i - 1) + result.number.get(i) * 10);
                 result.number.set(i, 0);
             }
         }
@@ -165,22 +154,16 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         result.number.add(0);
         PositiveNumber helper = new PositiveNumber();
         if (this.compareTo(other) < 0) return new PositiveNumber(0);
-        int o =0;
-
 
         while (divided.compareTo(PositiveNumber.ZERO) > 0
                 || divided.number.size()+helper.number.size() > other.number.size()) {
-
-            System.out.println("r with mult " + result);
             result = result.multiplication(10);
 
             for (int i = divided.number.size() - 1; i >= 0; i--) {
                 helper.number.add(0, divided.number.get(i));
                 helper.zeroDelete();
 
-                System.out.println("                                               Helper now = " + helper.number);
                 if (helper.compareTo(other) >= 0) {
-                    System.out.println("entrance " + helper.number);
                     while (helper.compareTo(other) >= 0) {
                         result = result.plus(PositiveNumber.ONE);
                         helper = helper.minus(other);
@@ -189,18 +172,12 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
                     for (int j = 0; j < k; j++) {
                         divided.number.remove(divided.number.size() - 1);
                     }
-
-                    System.out.println("divided = " + divided + " helper = " + helper.number);
-                    System.out.println(divided.number + " f f " + helper.number);
-                    System.out.println("result = " + result);
-
                     break;
                 }
 
                 if (divided.number.size() != number.size() && divided.number.size() - i > 1) {
                     result = result.multiplication(10);
                 }
-                System.out.println("result = " + result);
 
                 if (i == 0) return result;
             }
@@ -210,16 +187,13 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
                 PositiveNumber test = divided.clone();
                 test.zeroDelete();
                 if (PositiveNumber.ONE.compareTo(test) > 0) {
-                    for (int i = 0; i<k; i++ ) {
-                        System.out.println("success");
+                    for (int i = 0; i < k; i++ ) {
                         result = result.multiplication(10);
 
                     }
                     break;
                 }
             }
-            System.out.println("------------------------");
-            o++;
         }
 
         return result;
@@ -228,7 +202,7 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
 
     public PositiveNumber multiplication(int other) {
         PositiveNumber result = new PositiveNumber();
-        for (int i = 0; i<number.size(); i++) {
+        for (int i = 0; i < number.size(); i++) {
            result.number.add(this.number.get(i) * other);
        }
 
@@ -239,7 +213,7 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
     public PositiveNumber multiplication(PositiveNumber other) {
         PositiveNumber result = new PositiveNumber();
 
-        for (int i = other.number.size()-1; i >= 0 ; i--) {
+        for (int i = other.number.size() - 1; i >= 0 ; i--) {
             PositiveNumber helper = this.multiplication(other.number.get(i));
             result = result.plus(helper).multiplication(10);
         }
@@ -251,10 +225,10 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
     public int toInt() {
         if (this.number.size() > 10) return 0;
         int result = 0;
-        for (int i = this.number.size()-1; i > 0; i--) {
+        for (int i = this.number.size() - 1; i > 0; i--) {
             if (result+this.number.get(i) < Integer.MAX_VALUE) result+=this.number.get(i);
             else return 0;
-            if (Integer.MAX_VALUE/result > 10) result*=10;
+            if (Integer.MAX_VALUE/result > 10) result *= 10;
             else return 0;
         }
 
@@ -265,7 +239,7 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
     public BigInteger toBigInteger() {
         BigInteger result = new BigInteger("0");
 
-        for (int i = this.number.size()-1; i>=0; i--) {
+        for (int i = this.number.size() - 1; i >= 0; i--) {
             result = result.add(BigInteger.valueOf(this.number.get(i)));
             result = result.multiply(BigInteger.TEN);
         }
@@ -276,7 +250,7 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for (int i = number.size()-1; i>=0; i--) {
+        for (int i = number.size() - 1; i >= 0; i--) {
             result.append(number.get(i));
         }
 
@@ -306,9 +280,9 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
 
 
     public static ArrayList<Integer> transformation(ArrayList<Integer> array) {
-        for (int i = 0; i<array.size(); i++){
-            if (array.get(i)>=10) {
-                if (array.size()<i+2) {
+        for (int i = 0; i < array.size(); i++){
+            if (array.get(i) >= 10) {
+                if (array.size() < i + 2) {
                     array.add(array.get(i) / 10);
                     array.set(i, array.get(i) % 10);
                 } else {
@@ -321,15 +295,15 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
                         System.out.println("second");
                         return new ArrayList<>();
                     }
-                    while (array.get(i)<0) {
-                        array.set(i, array.get(i)+10);
-                        array.set(i+1, array.get(i+1) - 1);
+                    while (array.get(i) < 0) {
+                        array.set(i, array.get(i) + 10);
+                        array.set(i + 1, array.get(i + 1) - 1);
                     }
 
                 }
             }
         }
-        while (array.size()>1 && array.get(array.size()-1) == 0) {
+        while (array.size() > 1 && array.get(array.size() - 1) == 0) {
             array.remove(array.size() - 1);
         }
         return array;
@@ -337,12 +311,11 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
 
     public ArrayList<Integer> reversed() {
         ArrayList<Integer> result = new ArrayList<>();
-        for (int i = number.size()-1; i>=0; i--) {
+        for (int i = number.size() - 1; i >= 0; i--) {
             result.add(number.get(i));
         }
         return result;
     }
-
 
     //Как правильно переопределить этот метод?
     @Override
@@ -367,12 +340,9 @@ class Main{
         PositiveNumber test = new PositiveNumber( "1234567899");
         PositiveNumber test1 = new PositiveNumber("54654165498265456546523154486548797886798451654");
 
-        PositiveNumber a = new PositiveNumber(600);
-        PositiveNumber b = new PositiveNumber(601);
-
-        System.out.println(test1.multiplication(test));
-        System.out.println(test.toInt());
-        System.out.println("==" + b.remainderOfDivision(a));
-        System.out.println(PositiveNumber.TEN.clone());
+        PositiveNumber a = new PositiveNumber(601);
+        PositiveNumber b = new PositiveNumber(600);
+        System.out.println(a.division(b));
+        System.out.println(a.remainderOfDivision(b));
     }
 }
