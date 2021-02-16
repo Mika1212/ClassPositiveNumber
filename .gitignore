@@ -1,0 +1,6 @@
+
+$ cat .gitignore
+/shelf/
+/workspace.xml
+.idea/
+out/
