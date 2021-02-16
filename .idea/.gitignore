@@ -4,3 +4,4 @@ $ cat .gitignore
 /workspace.xml
 .idea/
 out/
+maven/
