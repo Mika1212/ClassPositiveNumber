@@ -16,17 +16,17 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
 
     public PositiveNumber(int newNumber) {
         this.number = arrayMaker(newNumber);
-        this.number = transformation(number);
+        transformation(number);
     }
 
     public PositiveNumber(String newNumber) {
         this.number = arrayMaker(newNumber);
-        this.number = transformation(number);
+        transformation(number);
     }
 
     public PositiveNumber(BigInteger newNumber) {
         this.number = arrayMaker(newNumber);
-        this.number = transformation(number);
+        transformation(number);
     }
 
     private ArrayList<Integer> arrayMaker(String anyString) {
