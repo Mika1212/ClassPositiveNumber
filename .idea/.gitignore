@@ -1,4 +1,5 @@
 # Default ignored files
+
 $ cat .gitignore
 /shelf/
 /workspace.xml
