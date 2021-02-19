@@ -1,4 +1,3 @@
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 
@@ -225,7 +224,6 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         return result.toString();
     }
 
-
     @Override
     public int compareTo(PositiveNumber o) {
         if (this.number.size() > o.number.size()) return 1;
@@ -242,7 +240,6 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         result.number.addAll(this.number);
         return result;
     }
-
 
     private ArrayList<Integer> transformation(ArrayList<Integer> array) {
         for (int i = 0; i < array.size(); i++){
@@ -285,6 +282,4 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
             this.number.remove(this.number.size() - 1);
         }
     }
-
-
 }
