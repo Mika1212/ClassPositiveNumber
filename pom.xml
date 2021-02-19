@@ -10,6 +10,9 @@
         <maven.compiler.release>11</maven.compiler.release>
         <junit-jupiter.version>5.8.0-M1</junit-jupiter.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <maven.compiler.source>1.8</maven.compiler.source>
+            <maven.compiler.target>1.8</maven.compiler.target>
+
     </properties>
 
     <groupId>groupId</groupId>
@@ -23,24 +26,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.5.1</version>
-            <configuration>
-                <includes>
-                    <include>*Test.java</include>
-                </includes>
-                <source>1.8</source>
-                <target>1.8</target>
-            </configuration>
-        </plugin>
-    </plugins>
-    </build>
-
-
 
 </project>
