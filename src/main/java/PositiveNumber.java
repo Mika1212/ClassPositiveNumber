@@ -283,3 +283,4 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         }
     }
 }
+
