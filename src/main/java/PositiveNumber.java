@@ -63,7 +63,7 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
                 result.add(number.get(i));
         }
 
-        result = transformation(result);
+        transformation(result);
         PositiveNumber res = new PositiveNumber();
         res.number = result;
         return res;
@@ -287,17 +287,4 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
     }
 
 
-}
-
-class Main{
-    public static void main(String[] args) {
-        PositiveNumber x = new PositiveNumber("1219028852");
-        PositiveNumber test = new PositiveNumber( "1234567899");
-        PositiveNumber test1 = new PositiveNumber("54654165498265456546523154486548797886798451654");
-
-        PositiveNumber a = new PositiveNumber(601);
-        PositiveNumber b = new PositiveNumber(600);
-        System.out.println(test1.division(test));
-        System.out.println(a.remainderOfDivision(b));
-    }
 }
