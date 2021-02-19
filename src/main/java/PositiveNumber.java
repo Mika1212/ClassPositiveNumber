@@ -13,8 +13,8 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         this.number = new ArrayList<>();
     }
 
-    public PositiveNumber(int newNumber) {
-        this.number = arrayMaker(newNumber);
+    public PositiveNumber(Integer newNumber) {
+        this.number = arrayMaker(newNumber.toString());
         transformation(number);
     }
 
@@ -24,7 +24,7 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
     }
 
     public PositiveNumber(BigInteger newNumber) {
-        this.number = arrayMaker(newNumber);
+        this.number = arrayMaker(newNumber.toString());
         transformation(number);
     }
 
@@ -37,15 +37,6 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         }
         return otherNumber;
     }
-
-    private ArrayList<Integer> arrayMaker(Integer anyInt) {
-        return arrayMaker(anyInt.toString());
-    }
-
-    private ArrayList<Integer> arrayMaker(BigInteger anyBigInt) {
-        return arrayMaker(anyBigInt.toString());
-    }
-
 
     public PositiveNumber plus(PositiveNumber other) {
         ArrayList<Integer> result = new ArrayList<>();
@@ -241,7 +232,7 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         return result;
     }
 
-    private ArrayList<Integer> transformation(ArrayList<Integer> array) {
+    private void transformation(ArrayList<Integer> array) {
         for (int i = 0; i < array.size(); i++){
             if (array.get(i) >= 10) {
                 if (array.size() < i + 2) {
@@ -266,7 +257,6 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         while (array.size() > 1 && array.get(array.size() - 1) == 0) {
             array.remove(array.size() - 1);
         }
-        return array;
     }
 
     private PositiveNumber reversed() {
@@ -283,4 +273,3 @@ public class PositiveNumber implements Comparable<PositiveNumber> {
         }
     }
 }
-
